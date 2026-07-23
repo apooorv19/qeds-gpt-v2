@@ -1,0 +1,12 @@
+redis
+rq
+requests
+groq
+langchain
+langchain-community
+langchain-core
+langchain-chroma
+chromadb
+pysqlite3-binary
+rank-bm25
+logfire[redis]

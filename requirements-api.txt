@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+redis
+rq
+requests
+groq
+logfire[fastapi,redis]

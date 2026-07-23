@@ -1,0 +1,14 @@
+streamlit
+fastapi
+uvicorn[standard]
+redis
+rq
+requests
+logfire[fastapi,redis]
+groq
+langchain
+langchain-community
+langchain-core
+langchain-chroma
+chromadb
+rank-bm25
