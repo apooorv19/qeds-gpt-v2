@@ -16,6 +16,7 @@ class LLMService:
 
     def __init__(self) -> None:
         api_key = os.environ.get("GROQ_API_KEY") or self._read_streamlit_secret()
+
         if not api_key:
             raise RuntimeError("GROQ_API_KEY is not configured.")
 
@@ -39,6 +40,13 @@ class LLMService:
     ) -> str:
         """Call the configured Groq chat model."""
 
+        logger.info(
+            "Calling Groq | model=%s | temperature=%s | max_tokens=%s",
+            Config.LLM_MODEL,
+            temp,
+            max_tokens,
+        )
+
         try:
             response = self.client.chat.completions.create(
                 model=Config.LLM_MODEL,
@@ -47,7 +55,21 @@ class LLMService:
                 max_tokens=max_tokens,
                 top_p=Config.TOP_P,
             )
-            return response.choices[0].message.content.strip()
+
+            logger.info("Groq request completed successfully")
+
+            content = response.choices[0].message.content
+
+            if not content:
+                logger.error("Groq returned an empty response: %s", response)
+                return "The language model returned an empty response."
+
+            return content.strip()
+
         except Exception as exc:
-            logger.error("LLM API Error: %s", exc, exc_info=True)
-            return "I encountered an error processing your request. Please try again."
+            logger.exception("Groq LLM request failed")
+
+            raise RuntimeError(
+                f"Groq LLM request failed: "
+                f"{type(exc).__name__}: {str(exc)}"
+            ) from exc
