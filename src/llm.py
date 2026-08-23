@@ -8,6 +8,7 @@ from groq import Groq
 
 from config import Config
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -15,7 +16,9 @@ class LLMService:
     """Handles Groq API communication."""
 
     def __init__(self) -> None:
-        api_key = os.environ.get("GROQ_API_KEY") or self._read_streamlit_secret()
+        api_key = os.environ.get(
+            "GROQ_API_KEY"
+        ) or self._read_streamlit_secret()
 
         if not api_key:
             raise RuntimeError("GROQ_API_KEY is not configured.")
@@ -29,6 +32,7 @@ class LLMService:
             import streamlit as st
 
             return st.secrets.get("GROQ_API_KEY")
+
         except Exception:
             return None
 
@@ -56,20 +60,20 @@ class LLMService:
                 top_p=Config.TOP_P,
             )
 
-            logger.info("Groq request completed successfully")
-
             content = response.choices[0].message.content
 
             if not content:
-                logger.error("Groq returned an empty response: %s", response)
-                return "The language model returned an empty response."
+                raise RuntimeError("Groq returned an empty response.")
 
             return content.strip()
 
         except Exception as exc:
-            logger.exception("Groq LLM request failed")
+            logger.exception(
+                "Groq request failed | model=%s",
+                Config.LLM_MODEL,
+            )
 
             raise RuntimeError(
-                f"Groq LLM request failed: "
-                f"{type(exc).__name__}: {str(exc)}"
+                f"LLM request failed using model "
+                f"'{Config.LLM_MODEL}': {exc}"
             ) from exc
