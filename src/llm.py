@@ -46,7 +46,6 @@ class LLMService:
                 temperature=temp,
                 max_tokens=max_tokens,
                 top_p=Config.TOP_P,
-                frequency_penalty=Config.FREQUENCY_PENALTY,
             )
             return response.choices[0].message.content.strip()
         except Exception as exc:
