@@ -21,7 +21,6 @@ class Config:
     TEMPERATURE = 0.1
     MAX_TOKENS = 1024
     TOP_P = 0.9
-    FREQUENCY_PENALTY = 0.15
 
 
 class QueryCategory:
