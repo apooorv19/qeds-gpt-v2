@@ -12,7 +12,7 @@ class Config:
     )
     COLLECTION_NAME = "semester_notes"
     EMBED_MODEL = "BAAI/bge-m3"
-    LLM_MODEL = "llama-3.1-8b-instant"
+    LLM_MODEL = "openai/gpt-oss-120b"
     TOP_K = 3
     SIMILARITY_THRESHOLD = 0.65
     MAX_CONTEXT_CHARS = 5000
