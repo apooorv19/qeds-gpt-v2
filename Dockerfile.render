@@ -1,0 +1,22 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+COPY requirements-api.txt requirements-worker.txt ./
+
+RUN pip install --no-cache-dir \
+    -r requirements-api.txt \
+    -r requirements-worker.txt
+
+COPY src ./src
+COPY chroma_db ./chroma_db
+COPY start-render.sh ./start-render.sh
+
+RUN chmod +x ./start-render.sh
+
+EXPOSE 10000
+
+CMD ["./start-render.sh"]
