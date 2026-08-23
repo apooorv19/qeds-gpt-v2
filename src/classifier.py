@@ -16,7 +16,7 @@ class QueryClassifier:
         result = self.llm_service.call_llm(
             [{"role": "user", "content": get_classifier_prompt(query, chat_history)}],
             temp=0.0,
-            max_tokens=10,
+            max_tokens=128,
         )
         result = result.strip().upper()
         valid = {
