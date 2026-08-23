@@ -58,6 +58,7 @@ class LLMService:
                 temperature=temp,
                 max_tokens=max_tokens,
                 top_p=Config.TOP_P,
+                reasoning_effort="low",
             )
 
             content = response.choices[0].message.content
