@@ -30,7 +30,6 @@ class LLMService:
 
         try:
             import streamlit as st
-
             return st.secrets.get("GROQ_API_KEY")
 
         except Exception:
@@ -61,10 +60,21 @@ class LLMService:
                 reasoning_effort="low",
             )
 
-            content = response.choices[0].message.content
+            message = response.choices[0].message
 
-            if not content:
-                raise RuntimeError("Groq returned an empty response.")
+            content = message.content
+
+            if content is None or not content.strip():
+                logger.error(
+                    "Groq returned empty content. "
+                    "finish_reason=%s | reasoning=%s",
+                    response.choices[0].finish_reason,
+                    getattr(message, "reasoning", None),
+                )
+
+                raise RuntimeError(
+                    "Groq returned an empty response."
+                )
 
             return content.strip()
 
